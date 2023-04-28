@@ -87,6 +87,15 @@ body {
   align-items: center;
 }
 
+.key:active{
+  transform: scaleX(0.9) translateY(4px);
+  border-bottom: 0px solid #eee;
+}
+
+/* .key:not(:active){
+  border-bottom: 4px solid #111;
+} */
+
 .active {
   transform: scaleX(0.9) translateY(4px);
   border-bottom: 0px solid #eee;
