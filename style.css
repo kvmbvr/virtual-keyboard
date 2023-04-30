@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-body {
+.body {
   background: rgb(0, 0, 0, .2);
   font-family: 'Nunito', sans-serif;
 }
@@ -31,6 +31,8 @@ body {
   font-size: 25px;
   font-weight: 700;
   padding: 10px;
+  background: #fff;
+  color: #111;
 }
 
 .keyboard-wrapper {}
@@ -90,6 +92,7 @@ body {
 .key:active{
   transform: scaleX(0.9) translateY(4px);
   border-bottom: 0px solid #eee;
+  background: #eee;
 }
 
 /* .key:not(:active){
@@ -99,7 +102,7 @@ body {
 .active {
   transform: scaleX(0.9) translateY(4px);
   border-bottom: 0px solid #eee;
-
+  background: #eee;
 }
 
 
