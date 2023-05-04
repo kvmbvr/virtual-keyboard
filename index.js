@@ -7,7 +7,7 @@ const body = document.querySelector('.body');
 body.innerHTML = `<div class="container">
 <textarea class="textarea" name="textarea" id="textarea" rows="10"></textarea>
 
-<p class="text">Для переключения языка комбинация: левыe ctrl + alt</p>
+<p class="text">Для переключения языка комбинация: левыe ctrl + alt. alt + ctrl не сработает.</p>
   <div class="keyboard">
     <div class="row">
       <div class="key Backquote">\`</div>
@@ -178,6 +178,7 @@ keys.forEach((key) => {
 });
 
 
+
 let isCapsClicked = false;
 let isShiftClicked = false;
 
@@ -201,7 +202,7 @@ document.addEventListener('keydown', (e) => {
     addTextAtCursorPosition(textarea, '    ')
   } else if (e.code === 'Delete') {
     deleteFoo(textarea)
-  } else if (e.code === 'AltLeft' & e.ctrlKey & lang === 'en' || e.code === 'AltRight' & e.ctrlKey & lang === 'en') {
+  } else if (e.code === 'AltLeft' & e.ctrlKey & lang === 'en' || e.code & e.ctrlKey === 'AltRight' & lang === 'en') {
     lang = 'ru'
     localStorage.setItem('lang', 'ru');
     if (isCapsClicked) {
