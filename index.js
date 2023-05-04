@@ -93,6 +93,9 @@ const textarea = document.querySelector('.textarea');
 const shift = document.querySelectorAll('.shift_key');
 const caps = document.querySelector('.CapsLock');
 
+if(localStorage.length === 0) {
+  localStorage.setItem('lang', 'en')
+}
 
 let lang = localStorage.getItem('lang');
 
