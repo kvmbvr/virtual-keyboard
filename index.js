@@ -186,10 +186,14 @@ console.log(lang)
 document.addEventListener('keydown', (e) => {
   e.preventDefault()
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    if (lang === 'en') {
+    if (lang === 'en' & !isCapsClicked) {
       setletters(letters[0].engShift);
-    } else {
+    } else if (lang === 'en' & isCapsClicked) {
+      setletters(letters[0].engLowerShift);
+    } else if(lang === 'ru' & !isCapsClicked){
       setletters(letters[0].ruShift);
+    } else if(lang === 'ru' & isCapsClicked){
+      setletters(letters[0].ruLowerShift);
     }
     isShiftClicked = true
   } else if (e.code === 'Backspace') {
@@ -236,10 +240,14 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
   e.preventDefault()
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    if (lang === 'en') {
+    if (lang === 'en' & !isCapsClicked) {
       setletters(letters[0].eng);
-    } else {
+    } else if (lang === 'en' & isCapsClicked) {
+      setletters(letters[0].engCaps);
+    } else if(lang === 'ru' & !isCapsClicked){
       setletters(letters[0].ru);
+    } else if(lang === 'ru' & isCapsClicked){
+      setletters(letters[0].ruCaps);
     }
     isShiftClicked = false
   }
@@ -270,19 +278,29 @@ document.addEventListener('keyup', (e) => {
 
 shift.forEach((element) => {
   element.addEventListener('mousedown', () => {
-    if (lang === 'en') {
+    if (lang === 'en' & !isCapsClicked) {
       setletters(letters[0].engShift);
-    } else {
+    } else if (lang === 'en' & isCapsClicked) {
+      setletters(letters[0].engLowerShift);
+    } else if(lang === 'ru' & !isCapsClicked){
       setletters(letters[0].ruShift);
+    } else if(lang === 'ru' & isCapsClicked){
+      setletters(letters[0].ruLowerShift);
     }
+    isShiftClicked = true
   });
 
   element.addEventListener('mouseup', () => {
-    if (lang === 'en') {
+    if (lang === 'en' & !isCapsClicked) {
       setletters(letters[0].eng);
-    } else {
+    } else if (lang === 'en' & isCapsClicked) {
+      setletters(letters[0].engCaps);
+    } else if(lang === 'ru' & !isCapsClicked){
       setletters(letters[0].ru);
+    } else if(lang === 'ru' & isCapsClicked){
+      setletters(letters[0].ruCaps);
     }
+    isShiftClicked = false
   });
 });
 
