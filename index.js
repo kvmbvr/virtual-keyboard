@@ -1,6 +1,9 @@
 
-const body = document.querySelector('.body');
+import letters from './keys.json' assert { type: "json" };
 
+
+
+const body = document.querySelector('.body');
 body.innerHTML = `<div class="container">
 <textarea class="textarea" name="textarea" id="textarea" rows="10"></textarea>
 
@@ -93,7 +96,6 @@ const caps = document.querySelector('.CapsLock');
 
 let lang = localStorage.getItem('lang');
 
-import letters from './keys.json' assert { type: "json" };
 
 
 function setletters(arr) {
