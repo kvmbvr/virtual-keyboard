@@ -17,7 +17,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
 }
 
 .textarea {
@@ -27,15 +27,15 @@
   margin: 0 auto;
   resize: none;
   outline: none;
-  /* font-family: 'Nunito', sans-serif; */
   font-size: 25px;
   font-weight: 700;
   padding: 10px;
   background: #fff;
   color: #111;
 }
-
-.keyboard-wrapper {}
+.text {
+  font-weight: bold;
+}
 
 .keyboard {
   max-width: 950px;
@@ -149,3 +149,4 @@
 .alt_right {}
 
 .ctrl_right {}
+

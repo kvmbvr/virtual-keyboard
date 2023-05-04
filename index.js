@@ -3,6 +3,8 @@ const body = document.querySelector('.body');
 
 body.innerHTML = `<div class="container">
 <textarea class="textarea" name="textarea" id="textarea" rows="10"></textarea>
+
+<p class="text">Для переключения языка комбинация: левыe ctrl + alt</p>
   <div class="keyboard">
     <div class="row">
       <div class="key Backquote">\`</div>
@@ -64,7 +66,7 @@ body.innerHTML = `<div class="container">
       <div class="key Comma">,</div>
       <div class="key Period">.</div>
       <div class="key Slash">/</div>
-      <div class="key static arrow ArrowUp">🠉</div>
+      <div class="key static arrow ArrowUp">▲</div>
       <div class="key static shift_key shift_right ShiftRight">Shift</div>
   </div>
   <div class="row">
@@ -73,18 +75,23 @@ body.innerHTML = `<div class="container">
       <div class="key static alt_key alt_left AltLeft">Alt</div>
       <div class="key static space_key Space"></div>
       <div class="key static alt_key alt_right AltRight">Alt</div>
-      <div class="key static left arrow ArrowLeft">🠈 </div>
-      <div class="key static down arrow ArrowDown">🠋</div>
-      <div class="key static right arrow ArrowRight">🠊</div>
+      <div class="key static left arrow ArrowLeft">◄</div>
+      <div class="key static down arrow ArrowDown">▼</div>
+      <div class="key static right arrow ArrowRight">►</div>
       <div class="key static ctrl_key ctrl_right ControlRight">Ctrl</div>
   </div>
   </div>
 </div>`;
 
+
+
 const keys = document.querySelectorAll('.key');
 const textarea = document.querySelector('.textarea');
 const shift = document.querySelectorAll('.shift_key');
 const caps = document.querySelector('.CapsLock');
+
+
+let lang = localStorage.getItem('lang');
 
 import letters from './keys.json' assert { type: "json" };
 
@@ -99,58 +106,138 @@ function setletters(arr) {
   });
 }
 
-setletters(letters[0].eng);
+if (lang === 'en') {
+  setletters(letters[0].eng);
+} else {
+  setletters(letters[0].ru);
+}
 
 caps.addEventListener('click', () => {
-  setletters(letters[0].engCaps);
-});
-caps.addEventListener('keydown', () => {
-  setletters(letters[0].engCaps);
+  if (!isCapsClicked) {
+    if (lang === 'en') {
+      setletters(letters[0].engCaps);
+    } else {
+      setletters(letters[0].ruCaps);
+    }
+    isCapsClicked = true
+
+  } else {
+    if (lang === 'en') {
+      setletters(letters[0].eng);
+    } else {
+      setletters(letters[0].ru);
+    }
+    isCapsClicked = false
+  }
+  caps.classList.toggle('active')
 });
 
+
+function addTextAtCursorPosition(textarea, textToAdd) {
+  let cursorPosition = textarea.selectionStart;
+  let textareaValue = textarea.value;
+  textarea.value = textareaValue.substring(0, cursorPosition) + textToAdd + textareaValue.substring(cursorPosition);
+  textarea.selectionEnd = cursorPosition + textToAdd.length;
+}
+
+function backspace(textarea) {
+  let cursorPosition = textarea.selectionStart;
+  textarea.value = textarea.value.substring(0, cursorPosition - 1) + '' + textarea.value.substring(cursorPosition);
+  textarea.selectionEnd = cursorPosition - 1;
+}
+
+function deleteFoo(textarea) {
+  let cursorPosition = textarea.selectionStart;
+  textarea.value = textarea.value.substring(0, cursorPosition) + '' + textarea.value.substring(cursorPosition + 1);
+  textarea.selectionEnd = cursorPosition;
+}
+
 keys.forEach((key) => {
-  /* key.setAttribute('key', key.textContent);
-  key.setAttribute('lowerCase', key.textContent.toLowerCase()); */
   key.addEventListener('click', () => {
     if (key.textContent.length === 1) {
-      textarea.value += key.textContent;
+      addTextAtCursorPosition(textarea, key.textContent)
+    } else if (key.classList.contains('Backspace')) {
+      backspace(textarea)
+    } else if (key.classList.contains('Space')) {
+      addTextAtCursorPosition(textarea, ' ')
+    } else if (key.classList.contains('Enter')) {
+      addTextAtCursorPosition(textarea, '\n')
+    } else if (key.classList.contains('Tab')) {
+      addTextAtCursorPosition(textarea, '    ')
+    } else if (key.classList.contains('Delete')) {
+      deleteFoo(textarea)
+    } else if (key.classList.contains('arrow')) {
+      addTextAtCursorPosition(textarea, key.textContent)
     }
   });
 });
 
-/*
-let arr = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp']
-let arr2 = [] */
-let isCapsClicked = false;
 
+let isCapsClicked = false;
+let isShiftClicked = false;
+
+console.log(lang)
 document.addEventListener('keydown', (e) => {
   e.preventDefault()
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    setletters(letters[0].engShift);
-  } 
-  if(e.code === 'AltLeft' & e.ctrlKey || e.code === 'AltRight' & e.ctrlKey) {
-    setletters(letters[0].ruCaps)
+    if (lang === 'en') {
+      setletters(letters[0].engShift);
+    } else {
+      setletters(letters[0].ruShift);
+    }
+    isShiftClicked = true
+  } else if (e.code === 'Backspace') {
+    backspace(textarea)
+  } else if (e.code === 'Space') {
+    addTextAtCursorPosition(textarea, ' ')
+  } else if (e.code === 'Enter') {
+    addTextAtCursorPosition(textarea, '\n')
+  } else if (e.code === 'Tab') {
+    addTextAtCursorPosition(textarea, '    ')
+  } else if (e.code === 'Delete') {
+    deleteFoo(textarea)
+  } else if (e.code === 'AltLeft' & e.ctrlKey & lang === 'en' || e.code === 'AltRight' & e.ctrlKey & lang === 'en') {
+    lang = 'ru'
+    localStorage.setItem('lang', 'ru');
+    if (isCapsClicked) {
+      setletters(letters[0].ruCaps)
+    } else {
+      setletters(letters[0].ru)
+    }
+  } else if (e.code === 'AltLeft' & e.ctrlKey & lang === 'ru' || e.code === 'AltRight' & e.ctrlKey & lang === 'ru') {
+    lang = 'en'
+    localStorage.setItem('lang', 'en');
+    if (isCapsClicked) {
+      setletters(letters[0].engCaps)
+    } else {
+      setletters(letters[0].eng)
+    }
   }
 
-  
+
   keys.forEach((key) => {
     if (key.classList.contains(e.code)) {
       key.classList.add('active');
       if (key.textContent.length === 1) {
-        textarea.value += key.textContent;
+        addTextAtCursorPosition(textarea, key.textContent)
+      } else if (key.classList.contains('arrow')) {
+        addTextAtCursorPosition(textarea, key.textContent)
       }
     }
   });
-
-  
 });
 
 document.addEventListener('keyup', (e) => {
   e.preventDefault()
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    setletters(letters[0].eng);
+    if (lang === 'en') {
+      setletters(letters[0].eng);
+    } else {
+      setletters(letters[0].ru);
+    }
+    isShiftClicked = false
   }
-  
+
   keys.forEach((key) => {
     if (key.classList.contains(e.code)) {
       key.classList.remove('active');
@@ -158,21 +245,38 @@ document.addEventListener('keyup', (e) => {
   });
   if (e.code === 'CapsLock' & isCapsClicked === false) {
     isCapsClicked = true
-    setletters(letters[0].engCaps);
+    if (lang === 'en') {
+      setletters(letters[0].engCaps);
+    } else {
+      setletters(letters[0].ruCaps);
+    }
     caps.classList.add('active');
-  } else if(e.code === 'CapsLock' & isCapsClicked) {
+  } else if (e.code === 'CapsLock' & isCapsClicked) {
     isCapsClicked = false
-    setletters(letters[0].eng);
+    if (lang === 'en') {
+      setletters(letters[0].eng);
+    } else {
+      setletters(letters[0].ru);
+    }
     caps.classList.remove('active');
   }
 });
 
 shift.forEach((element) => {
   element.addEventListener('mousedown', () => {
-    setletters(letters[0].engShift);
+    if (lang === 'en') {
+      setletters(letters[0].engShift);
+    } else {
+      setletters(letters[0].ruShift);
+    }
   });
 
   element.addEventListener('mouseup', () => {
-    setletters(letters[0].eng);
+    if (lang === 'en') {
+      setletters(letters[0].eng);
+    } else {
+      setletters(letters[0].ru);
+    }
   });
 });
+
